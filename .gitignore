@@ -95,3 +95,9 @@ API/obj/Release/netcoreapp3.1/win-x64/staticwebassets/API.StaticWebAssets.xml
 API/API.csproj.user
 API/script.sql
 API/saisscript.sql
+.vs/Saica/v16/.suo
+.vs/Saica/v16/Server/sqlite3/db.lock
+.vs/Saica/v16/Server/sqlite3/storage.ide
+.vs/Saica/v16/Server/sqlite3/storage.ide-shm
+.vs/Saica/v16/Server/sqlite3/storage.ide-wal
+API/.config/dotnet-tools.json
