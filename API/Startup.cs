@@ -134,12 +134,14 @@ namespace API
             // app.UseMvc();
 
             app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "attachments")),
-                RequestPath = "/attachments"
-            });
+
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(
+            //        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "attachments")),
+            //    RequestPath = "/attachments"
+            //});
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

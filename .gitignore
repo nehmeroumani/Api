@@ -101,3 +101,8 @@ API/saisscript.sql
 .vs/Saica/v16/Server/sqlite3/storage.ide-shm
 .vs/Saica/v16/Server/sqlite3/storage.ide-wal
 API/.config/dotnet-tools.json
+/API/bin/Debug/netcoreapp3.1
+/Core/bin/Debug/netcoreapp3.1
+/Core/obj
+/Test/bin/Debug/netcoreapp3.1
+/Test/obj
