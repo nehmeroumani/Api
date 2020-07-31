@@ -26,7 +26,7 @@ namespace API.Controllers
             }
             var l = P.Categorys.GetAll(rd, out var total).ToList();
             var dimensions = P.Dimensions.GetAll().ToList();
-            l.ForEach(x => x.Dimensions = dimensions.Where(z => z.CategoryId == x.Id).OrderBy(x=>x.DisplayOrder).ToList());
+            l.ForEach(x => x.Dimensions = dimensions.Where(z => z.CategoryId == x.Id).OrderBy(z=>z.DisplayOrder).ToList());
             T(total, rd);
             return l;
         }

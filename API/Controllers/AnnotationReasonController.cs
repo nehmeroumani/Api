@@ -66,6 +66,8 @@ namespace API.Controllers
                             var tw = P.TweetWords.Get(u.TweetWordId);
                             value.StartWordId = tw.Id;
                             value.StartWordPosition = tw.Position;
+                            value.EndWordId = tw.Id;
+                            value.EndWordPosition = tw.Position;
                         }
                         else if (i == value.AnnotationReasonWords.Count() - 1)
                         {

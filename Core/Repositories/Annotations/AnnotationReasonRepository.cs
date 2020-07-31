@@ -21,6 +21,13 @@ namespace Core.Repositories.Annotations
         public int? StartWordPosition { get; set; }
         public int? EndWordPosition { get; set; }
         public List<AnnotationReasonWord> AnnotationReasonWords { get; set; }
+
+
+
+
+        //For views
+        public int TweetId { get; set; }
+        public int UserId { get; set; }
     }
 
     public class AnnotationReasonWordRepository : BaseIntRepository<AnnotationReasonWord>
@@ -35,6 +42,10 @@ namespace Core.Repositories.Annotations
     {
         public int AnnotationReasonId { get; set; }
         public int TweetWordId { get; set; }
+
+
+
+
 
     }
 }
