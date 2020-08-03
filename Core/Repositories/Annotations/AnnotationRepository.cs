@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.Repositories.Annotations
 {
@@ -10,8 +11,16 @@ namespace Core.Repositories.Annotations
             base.Init("Annotation_" + userId, "AnnotationTaskUserTweetId,CategoryId,DimensionId,AnnotationTaskId");
         }
 
-     
-        
+
+        public List<Annotation> GetAllView(int size,int page)
+        {
+            string query =$"SELECT  a.Id, a.CreationDate, a.LastModified, a.IsDeleted, a.AnnotationTaskId, a.CategoryId," +
+                          $" a.DimensionId,a.AnnotationTaskUserTweetId, dbo.AnnotationTaskUserTweet.TweetId, dbo.AnnotationTaskUserTweet.UserId FROM " +
+                          $"  {TableName} AS a INNER JOIN AnnotationTaskUserTweet ON a.AnnotationTaskUserTweetId = dbo.AnnotationTaskUserTweet.Id";
+
+
+            return GetAll(size, page, "", "CreationDate Desc", query, true).ToList();
+        }
     }
 
     public class Annotation : BaseIntModel

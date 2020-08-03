@@ -97,12 +97,18 @@ namespace Core.Repositories
             return ExecuteScaler("Select count(*) from [" + viewt + "] WHERE IsDeleted=0 " + where);
         }
 
-        public int GetCount(string where = "", string view = "")
+        public int GetCount(string @where = "", string view = "", bool query=false)
         {
-            string table = view.IsNotNullOrEmpty() ? view : TableName;
+
+            string table = TableName;
+            if (!string.IsNullOrEmpty(view))
+                table = view;
+
+            table = query ? $"({table}) as qv" : $"[{table}]";
+
             if (!string.IsNullOrEmpty(where))
                 where = "AND " + where;
-            return ExecuteScaler("Select count(*) from [" + table + "] WHERE IsDeleted=0 " + where);
+            return ExecuteScaler("Select count(*) from " + table + " WHERE IsDeleted=0 " + where);
         }
         public int GetCount(RequestData rd)
         {
@@ -212,8 +218,8 @@ namespace Core.Repositories
 
             string where = GetWhere(rd);
 
-            var list = GetAll(size: rd.Size, page: rd.Page, where: where, orderBy: rd.OrderBy, view: view);
-            total = GetCount(where: where, view: view);
+            var list = GetAll(size: rd.Size, page: rd.Page, where: where, orderBy: rd.OrderBy, view: view, query: query);
+            total = GetCount(where: where, view: view, query: query);
             return list;
         }
         public IEnumerable<T> GetAll(int size, int page = 1, string where = "", string orderBy = "CreationDate Desc", string view = "", bool query = false)
@@ -224,10 +230,10 @@ namespace Core.Repositories
                 return default(IEnumerable<T>);
 
             string table = TableName;
-            if (string.IsNullOrEmpty(view))
+            if (!string.IsNullOrEmpty(view))
                 table = view;
 
-            table = query ? $"({table})" : $"[{table}]";
+            table = query ? $"({table}) as qv" : $"[{table}]";
 
             return
                 Query<T>($"Select * from {table}  WHERE IsDeleted=0 " + where +

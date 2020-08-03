@@ -12,6 +12,20 @@ namespace Core.Repositories.Annotations
         }
 
 
+        public List<AnnotationTask> GetAllView(RequestData rd, out int total)
+        {
+            var query = @"SELECT        Id, CreationDate, LastModified, IsDeleted, Name, StartTweetId, EndTweetId, CreatedByUserId,
+                                IsFinished, UserId, Status, StartTime, FinishTime, TaskDuration,                            
+                             (SELECT        COUNT(*) AS Expr1
+                               FROM            dbo.AnnotationTaskUserTweet
+                               WHERE        (AnnotationTaskId = a.Id) AND (IsDeleted = 0)) AS TotalTweets,
+                             (SELECT        COUNT(*) AS Expr1
+                               FROM            dbo.AnnotationTaskUserTweet AS AnnotationTaskUserTweet_1
+                               WHERE        (AnnotationTaskId = a.Id) AND (IsDeleted = 0) AND (Status = 30)) AS DoneTweets
+                                FROM            dbo.AnnotationTask AS a";
+
+            return GetAll(rd, out total, query, true).ToList();
+        }
     }
 
     public class AnnotationTask : BaseIntModel
@@ -82,9 +96,10 @@ namespace Core.Repositories.Annotations
             return data;
         }
 
-        public List<AnnotationTaskUserTweet>  GetAllView(RequestData rd, out int total)
+
+        public string GetViewQuery()
         {
-            var query =
+            return
                 @"SELECT        atu.Id, atu.CreationDate, atu.LastModified, atu.IsDeleted, atu.TweetId, atu.UserId, atu.AnnotationTaskId, atu.Status, dbo.[User].Name AS UserName, dbo.Tweet.Text AS TweetText, atu.StartTime, atu.FinishTime, 
                          atu.LevelOfConfidenceId, atu.TaskDuration, atu.IsIrrelevant, dbo.LevelOfConfidence.Name AS ConfidenceName,
                              (SELECT        COUNT(*) AS Expr1
@@ -94,10 +109,16 @@ namespace Core.Repositories.Annotations
                          dbo.[User] ON atu.UserId = dbo.[User].Id INNER JOIN
                          dbo.Tweet ON atu.TweetId = dbo.Tweet.Id LEFT OUTER JOIN
                          dbo.LevelOfConfidence ON atu.LevelOfConfidenceId = dbo.LevelOfConfidence.Id";
-
-            return GetAll(rd, out total, query, true).ToList();
         }
 
+        public List<AnnotationTaskUserTweet> GetAllView(RequestData rd, out int total)
+        {
+            return GetAll(rd, out total, GetViewQuery(), true).ToList();
+        }
+        public List<AnnotationTaskUserTweet> GetAllView(string where,int size,int page)
+        {
+            return GetAll(size,page,where,"CreationDate Desc", GetViewQuery(),true).ToList();
+        }
 
     }
     public class AnnotationTaskUserTweet : BaseIntModel

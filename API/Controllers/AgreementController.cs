@@ -21,14 +21,14 @@ namespace API.Controllers
             var userId1 =int.Parse(rd.Filter.Single(x => x.Key.ToLower() == "userid1").Value);
             var userId2 = int.Parse(rd.Filter.Single(x => x.Key.ToLower() == "userid2").Value);
 
-            var annotationsTaskUser1 = Pool.I.AnnotationTaskUserTweets.GetAllView( "Status = 30 AND UserId =" + userId1).ToList();
-            var annotationsTaskUser2 = Pool.I.AnnotationTaskUserTweets.GetAllView("Status = 30 AND UserId =" + userId2).ToList();
+            var annotationsTaskUser1 = Pool.I.AnnotationTaskUserTweets.GetAllView( "Status = 30 AND UserId =" + userId1,1000,1).ToList();
+            var annotationsTaskUser2 = Pool.I.AnnotationTaskUserTweets.GetAllView("Status = 30 AND UserId =" + userId2, 1000, 1).ToList();
 
-            var annotationsUser1 = Pool.I.Annotations[userId1].GetAllView("UserId =" + userId1).ToList();
-            var annotationsUser2 = Pool.I.Annotations[userId2].GetAllView("UserId =" + userId2).ToList();
+            var annotationsUser1 = Pool.I.Annotations[userId1].GetAllView(1000,1).ToList();
+            var annotationsUser2 = Pool.I.Annotations[userId2].GetAllView(1000, 1).ToList();
 
-            var annotationsUserReason1 = Pool.I.AnnotationReasons[userId1].GetAllView("UserId =" + userId1).ToList();
-            var annotationsUserReason2 = Pool.I.AnnotationReasons[userId2].GetAllView("UserId =" + userId2).ToList();
+            var annotationsUserReason1 = Pool.I.AnnotationReasons[userId1].GetAllView(1000, 1, userId1).ToList();
+            var annotationsUserReason2 = Pool.I.AnnotationReasons[userId2].GetAllView(1000, 1, userId2).ToList();
 
 
             var categories = Pool.I.Categorys.GetAll().ToList();

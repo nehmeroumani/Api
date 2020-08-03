@@ -12,7 +12,7 @@ namespace Core.Repositories.Twitter
         {
             base.Init("Tweet", "TweetCreationDate,Text,AccountDisplayName,TweetId");
         }
-        
+
         public IEnumerable<Tweet> GetStatistics(RequestData rd, out int total)
         {
             string Where = "WHERE t.IsDeleted=0 AND t.ThemeDetected=1 ";
@@ -87,9 +87,20 @@ namespace Core.Repositories.Twitter
             return lst;
         }
 
-       public List<Tweet> GetRange(int startTweetId, int endTweetId)
+        public List<Tweet> GetRange(int startTweetId, int endTweetId)
         {
             return GetWhere($" Id >= {startTweetId} and Id<={endTweetId}");
+        }
+
+        public List<Tweet> GetAllView(RequestData rd, out int total)
+        {
+            var query = @"SELECT        Id, CreationDate, LastModified, IsDeleted, TweetCreationDate, Text, AccountDisplayName,
+                             (SELECT        COUNT(*) AS Expr1
+                               FROM            dbo.AnnotationTaskUserTweet
+                               WHERE        (IsDeleted = 0) AND (t.Id = TweetId)) AS AssignedInTasks
+                            FROM            dbo.Tweet AS t";
+
+            return GetAll(rd, out total, query, true).ToList();
         }
     }
     public static class TweetParser
@@ -147,7 +158,7 @@ namespace Core.Repositories.Twitter
 
     public class Tweet : BaseIntModel
     {
-   
+
 
         public string Text { get; set; }
 
