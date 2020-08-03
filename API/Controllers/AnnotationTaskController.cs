@@ -169,7 +169,7 @@ namespace API.Controllers
             if (i == null)
                 return NotFound();
 
-            var annotations = P.Annotations.GetWhere($"AnnotationTaskId={id}");
+            var annotations = P.Annotations[i.UserId].GetWhere($"AnnotationTaskId={id}");
             if (annotations.Any())
             {
                 return Error("Cannot Delete Task/it have already annotations");

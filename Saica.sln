@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{CF3BDBAF-C68E-405A-9F3F-B513ADB6952E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{88DD261A-2FF1-4AC4-9C1A-29905F1708B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{88DD261A-2FF1-4AC4-9C1A-29905F1708B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Import", "Import\Import.csproj", "{0BC34223-7446-415C-A232-3AABA358FD0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{88DD261A-2FF1-4AC4-9C1A-29905F1708B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88DD261A-2FF1-4AC4-9C1A-29905F1708B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88DD261A-2FF1-4AC4-9C1A-29905F1708B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BC34223-7446-415C-A232-3AABA358FD0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BC34223-7446-415C-A232-3AABA358FD0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BC34223-7446-415C-A232-3AABA358FD0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BC34223-7446-415C-A232-3AABA358FD0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

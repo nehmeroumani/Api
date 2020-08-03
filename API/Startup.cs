@@ -63,6 +63,7 @@ namespace API
             // configure jwt authentication
             var appSettings = appSettingsSection.Get<AppSettings>();
             Pool.I.ConnectionString = appSettings.Connection;
+            Pool.I.InitAnnotationRepositorys(); 
 
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddAuthentication(x =>

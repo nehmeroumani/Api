@@ -19,6 +19,61 @@ namespace Core.Repositories
         {
             return GetSingle("Username", value.Trim());
         }
+
+        public void CreateNewUserTables(User u)
+        {
+            var annotationTable = $@"CREATE TABLE [dbo].[Annotation_{u.Id}](
+                [Id][int] IDENTITY(1, 1) NOT NULL,
+                [CreationDate][datetime] NULL,
+                [LastModified][datetime] NULL,
+                [IsDeleted][bit] NULL,                
+                [CategoryId][int] NULL,
+                [DimensionId][int] NULL,
+                [AnnotationTaskUserTweetId] [int],
+                [AnnotationTaskId] [int],
+                CONSTRAINT[PK_Annotation{u.Id}] PRIMARY KEY CLUSTERED
+                    (
+                [Id] ASC
+                ) WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]
+                ) ON[PRIMARY]
+                ";
+
+            var annotationReasonTable = $@"CREATE TABLE[dbo].[AnnotationReason_{u.Id}](
+                [Id][int] IDENTITY(1,1) NOT NULL,
+                [CreationDate] [datetime] NULL,
+                [LastModified] [datetime] NULL,
+                [IsDeleted] [bit] NULL,
+                [AnnotationId] [int] NULL,
+                [CategoryId] [int] NULL,
+                [DimensionId] [int] NULL,
+                [StartWordId] [int] NULL,
+                [EndWordId] [int] NULL,
+                [StartWordPosition] [int] NULL,
+                [EndWordPosition] [int] NULL,
+                CONSTRAINT[PK_AnnotationReason{u.Id}] PRIMARY KEY CLUSTERED
+                (
+                    [Id] ASC
+                ) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]
+                ) ON [PRIMARY]
+                ";
+
+            var annotationReasonWordTable = $@"CREATE TABLE [dbo].[AnnotationReasonWord_{u.Id}](
+	            [Id] [int] IDENTITY(1,1) NOT NULL,
+	            [CreationDate] [datetime] NULL,
+	            [LastModified] [datetime] NULL,
+	            [IsDeleted] [bit] NULL,
+	            [AnnotationReasonId] [int] NULL,
+	            [TweetWordId] [int] NULL,
+             CONSTRAINT [PK_AnnotationReasonWord{u.Id}] PRIMARY KEY CLUSTERED 
+            (
+	            [Id] ASC
+            ) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+            ) ON [PRIMARY] 
+            ";
+
+            Execute("BEGIN TRANSACTION; " + annotationTable + annotationReasonTable + annotationReasonWordTable + " COMMIT;  ");
+        }
+
     }
 }
 

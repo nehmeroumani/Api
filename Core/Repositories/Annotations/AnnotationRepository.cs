@@ -5,21 +5,25 @@ namespace Core.Repositories.Annotations
 {
     public class AnnotationRepository : BaseIntRepository<Annotation>
     {
-        public AnnotationRepository()
+        public AnnotationRepository(int userId)
         {
-            base.Init("Annotation", "AnnotationTaskUserTweetId,CategoryId,DimensionId,AnnotationTaskId");
+            base.Init("Annotation_" + userId, "AnnotationTaskUserTweetId,CategoryId,DimensionId,AnnotationTaskId");
         }
+
+     
+        
     }
 
     public class Annotation : BaseIntModel
     {
         public int AnnotationTaskUserTweetId { get; set; }
-       
+        public int AnnotationTaskId { get; set; }
         public int? CategoryId { get; set; }
         public int? DimensionId { get; set; }
         public List<AnnotationReason> AnnotationReasons { get; set; }
 
-        public int AnnotationTaskId { get; set; }
+
+
 
 
         //For views

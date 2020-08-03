@@ -5,9 +5,9 @@ namespace Core.Repositories.Annotations
 {
     public class AnnotationReasonRepository : BaseIntRepository<AnnotationReason>
     {
-        public AnnotationReasonRepository()
+        public AnnotationReasonRepository(int userId)
         {
-            base.Init("AnnotationReason", "AnnotationId,CategoryId,DimensionId,StartWordId,EndWordId,StartWordPosition,EndWordPosition"); 
+            base.Init("AnnotationReason_" + userId, "AnnotationId,CategoryId,DimensionId,StartWordId,EndWordId,StartWordPosition,EndWordPosition"); 
         }
       }
 
@@ -32,9 +32,9 @@ namespace Core.Repositories.Annotations
 
     public class AnnotationReasonWordRepository : BaseIntRepository<AnnotationReasonWord>
     {
-        public AnnotationReasonWordRepository()
+        public AnnotationReasonWordRepository(int userId)
         {
-            base.Init("AnnotationReasonWord", "AnnotationReasonId,TweetWordId");
+            base.Init("AnnotationReasonWord_" + userId, "AnnotationReasonId,TweetWordId");
         }
     }
 

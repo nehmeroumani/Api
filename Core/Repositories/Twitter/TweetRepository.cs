@@ -10,7 +10,7 @@ namespace Core.Repositories.Twitter
     {
         public TweetRepository()
         {
-            base.Init("Tweet", "TweetCreationDate,Text,AccountDisplayName,TweetAccountId,TweetId", "TweetCreationDate");
+            base.Init("Tweet", "TweetCreationDate,Text,AccountDisplayName,TweetId");
         }
         
         public IEnumerable<Tweet> GetStatistics(RequestData rd, out int total)

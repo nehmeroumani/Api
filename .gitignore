@@ -109,3 +109,5 @@ API/.config/dotnet-tools.json
 /API/bin/Release/netcoreapp3.1
 /API/obj/Release/netcoreapp3.1/PubTmp/Out
 /Core/bin/Release/netcoreapp3.1
+/Import/obj
+/Import/bin

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core.Cache;
 using Core.Repositories;
 using Core.Repositories.Annotations;
@@ -20,8 +21,7 @@ namespace Core
         public TweetAccountRepository TweetAccounts { get; set; }
         public UserRepository Users { get; set; }
         public TweetRepository Tweets { get; set; }
-        public AnnotationReasonRepository AnnotationReasons { get; set; }
-        public AnnotationRepository Annotations { get; set; }
+
         public WordRepository Words { get; set; }
         public AnnotationTaskRepository AnnotationTasks { get; set; }
         public TwitterTagRepository Tags { get; set; }
@@ -31,8 +31,13 @@ namespace Core
         public TweetWordRepository TweetWords { get; set; }
         public LevelOfConfidenceRepository LevelOfConfidences { get; set; }
         //public AnnotationTaskUserRepository AnnotationTaskUsers { get; set; }
-        public AnnotationReasonWordRepository AnnotationReasonWords { get; set; }
         public AnnotationTaskUserTweetRepository AnnotationTaskUserTweets { get; set; }
+
+
+        public Dictionary<int, AnnotationRepository> Annotations { get; set; }
+        public Dictionary<int, AnnotationReasonRepository> AnnotationReasons { get; set; }
+        public Dictionary<int, AnnotationReasonWordRepository> AnnotationReasonWords { get; set; }
+
 
         private Pool()
         {
@@ -42,23 +47,36 @@ namespace Core
         //SELECT  TABLE_NAME + 's = new ' + TABLE_NAME + 'Repository();' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'
         public void Init()
         {
+            Users = new UserRepository();
             AnnotationTaskUserTweets = new AnnotationTaskUserTweetRepository();
-            AnnotationReasonWords = new AnnotationReasonWordRepository();
             TweetAccounts = new TweetAccountRepository();
             //AnnotationTaskUsers = new AnnotationTaskUserRepository();
             LevelOfConfidences = new LevelOfConfidenceRepository();
             Words = new WordRepository();
             TweetWords = new TweetWordRepository();
-            AnnotationReasons = new AnnotationReasonRepository();
-            Annotations = new AnnotationRepository();
             AnnotationTasks = new AnnotationTaskRepository();
             Dimensions = new DimensionRepository();
             TwitterTags = new TwitterTagRepository();
             TweetMapTags = new TweetTagMapRepository();
             Tags = new TwitterTagRepository();
             Tweets = new TweetRepository();
-            Users = new UserRepository();
             Categorys = new CategoryRepository();
+        }
+
+        public void InitAnnotationRepositorys()
+        {
+            var allUsers = Users.GetAll();
+
+            Annotations = new Dictionary<int, AnnotationRepository>();
+            AnnotationReasons = new Dictionary<int, AnnotationReasonRepository>();
+            AnnotationReasonWords = new Dictionary<int, AnnotationReasonWordRepository>();
+
+            foreach (var user in allUsers)
+            {
+                Annotations[user.Id] = new AnnotationRepository(user.Id);
+                AnnotationReasons[user.Id] = new AnnotationReasonRepository(user.Id);
+                AnnotationReasonWords[user.Id] = new AnnotationReasonWordRepository(user.Id);
+            }
         }
     }
 }

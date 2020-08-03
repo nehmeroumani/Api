@@ -23,7 +23,11 @@ namespace API.Controllers
         }
         protected bool IsAdmin => User.IsInRole(((int)RoleEnum.Admin).ToString());
 
-          
+        //protected int UserId()
+        //{
+        //    return 0; //int.Parse(Request.Query["userid"]);
+        //}
+
         protected BadRequestObjectResult Error(string message)
         {
             return BadRequest(new { message = message });

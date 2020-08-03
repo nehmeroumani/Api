@@ -59,10 +59,24 @@ namespace API.Controllers
             if (i == null)
                 return NotFound();
 
-            var annotations = P.Annotations.GetWhere($"DimensionId={id}").ToList();
-            if (!annotations.Any())
+            var users = P.Users.GetAll();
+            var exists = false;
+            foreach (var user in users)
+            {
+                var annotations = P.Annotations[user.Id].GetWhere($"DimensionId={id}").ToList();
+                if (annotations.Any())
+                {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists)
             {
                 P.Dimensions.Delete(id);
+            }
+            else
+            {
+                return Error("cannot delete dimension");
             }
             return Ok(i);
         }

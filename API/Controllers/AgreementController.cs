@@ -18,17 +18,17 @@ namespace API.Controllers
         public ActionResult<IEnumerable<TweetAgreement>> GetAll()
         {
             var rd = Rd();
-            var userId1 = rd.Filter.Single(x => x.Key.ToLower() == "userid1").Value;
-            var userId2 = rd.Filter.Single(x => x.Key.ToLower() == "userid2").Value;
+            var userId1 =int.Parse(rd.Filter.Single(x => x.Key.ToLower() == "userid1").Value);
+            var userId2 = int.Parse(rd.Filter.Single(x => x.Key.ToLower() == "userid2").Value);
 
-            var annotationsTaskUser1 = Pool.I.AnnotationTaskUserTweets.GetView("Status = 30 AND UserId =" + userId1).ToList();
-            var annotationsTaskUser2 = Pool.I.AnnotationTaskUserTweets.GetView("Status = 30 AND UserId =" + userId2).ToList();
+            var annotationsTaskUser1 = Pool.I.AnnotationTaskUserTweets.GetAllView( "Status = 30 AND UserId =" + userId1).ToList();
+            var annotationsTaskUser2 = Pool.I.AnnotationTaskUserTweets.GetAllView("Status = 30 AND UserId =" + userId2).ToList();
 
-            var annotationsUser1 = Pool.I.Annotations.GetView("UserId =" + userId1).ToList();
-            var annotationsUser2 = Pool.I.Annotations.GetView("UserId =" + userId2).ToList();
+            var annotationsUser1 = Pool.I.Annotations[userId1].GetAllView("UserId =" + userId1).ToList();
+            var annotationsUser2 = Pool.I.Annotations[userId2].GetAllView("UserId =" + userId2).ToList();
 
-            var annotationsUserReason1 = Pool.I.AnnotationReasons.GetView("UserId =" + userId1).ToList();
-            var annotationsUserReason2 = Pool.I.AnnotationReasons.GetView("UserId =" + userId2).ToList();
+            var annotationsUserReason1 = Pool.I.AnnotationReasons[userId1].GetAllView("UserId =" + userId1).ToList();
+            var annotationsUserReason2 = Pool.I.AnnotationReasons[userId2].GetAllView("UserId =" + userId2).ToList();
 
 
             var categories = Pool.I.Categorys.GetAll().ToList();
@@ -72,7 +72,7 @@ namespace API.Controllers
             return lst;
         }
 
-        private void AgreementCategory(TweetAgreement ta, List<Category> categories,List<TweetWord> words,
+        private void AgreementCategory(TweetAgreement ta, List<Category> categories, List<TweetWord> words,
             List<Annotation> tweetAnnotation1, List<Annotation> tweetAnnotation2,
             List<AnnotationReason> tweetAnnotationReason1,
             List<AnnotationReason> tweetAnnotationReason2)
@@ -105,8 +105,8 @@ namespace API.Controllers
             {
                 foreach (var dimension in dimensions)
                 {
-                    var tc1 = tweetAnnotationReason1.Any(x => x.DimensionId == dimension.Id && x.StartWordId == w.Id)? 1: 0;
-                    var tc2 = tweetAnnotationReason2.Any(x => x.DimensionId == dimension.Id && x.StartWordId == w.Id)? 1: 0;
+                    var tc1 = tweetAnnotationReason1.Any(x => x.DimensionId == dimension.Id && x.StartWordId == w.Id) ? 1 : 0;
+                    var tc2 = tweetAnnotationReason2.Any(x => x.DimensionId == dimension.Id && x.StartWordId == w.Id) ? 1 : 0;
                     FillMatrix(matrixReason, tc1, tc2);
                 }
             }
@@ -115,7 +115,7 @@ namespace API.Controllers
             ta.ReasonAgreement = calcReason.F1Measure;
         }
 
-    
+
 
 
 
@@ -133,7 +133,7 @@ namespace API.Controllers
 
         private MatrixCalculations CalculateMetrics(Matrix m)
         {
-            var precision = m.TruePositive + m.FalsePositive == 0 ? -1 : m.TruePositive*1.0 / (m.TruePositive + m.FalsePositive);
+            var precision = m.TruePositive + m.FalsePositive == 0 ? -1 : m.TruePositive * 1.0 / (m.TruePositive + m.FalsePositive);
             var recall = m.TruePositive + m.FalseNegative == 0 ? -1 : m.TruePositive * 1.0 / (m.TruePositive + m.FalseNegative);
             var f1Measure = precision + recall == 0 ? 0 : (2 * (precision * recall) / (precision + recall));
 

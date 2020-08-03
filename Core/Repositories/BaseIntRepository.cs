@@ -40,10 +40,10 @@ namespace Core.Repositories
         #region common functions: Getall, getbyid, save update insert, delete
 
 
-        public T GetView(int id)
-        {
-            return Query<T>($"Select * From {ViewName}  WHERE Id='{id}'").SingleOrDefault();
-        }
+        //public T GetView(int id)
+        //{
+        //    return Query<T>($"Select * From {ViewName}  WHERE Id='{id}'").SingleOrDefault();
+        //}
         public T Get(int id)
         {
             if (string.IsNullOrEmpty(SqlSelect))
@@ -123,32 +123,32 @@ namespace Core.Repositories
                 return default(IEnumerable<T>);
             return Query<T>(SqlSelect + " WHERE IsDeleted=0 order by " + orderBy);
         }
-        public IEnumerable<T> GetView(string where = "")
-        {
-            return GetView("", where);
-        }
+        //public IEnumerable<T> GetView(string where = "")
+        //{
+        //    return GetView("", where);
+        //}
 
-        public IEnumerable<T> GetView(string view, string where, string orderBy = "CreationDate Desc")
-        {
-            string viewt = view.IsNotNullOrEmpty() ? view : ViewName;
-            if (!string.IsNullOrEmpty(where))
-                where = "AND " + where;
-            return Query<T>("Select * From " + viewt + " WHERE IsDeleted=0 " + where + " order By " + orderBy);
-        }
-        public IEnumerable<T> GetView(int size, int page = 1, string where = "",
-            string orderBy = "CreationDate Desc", string view = "")
-        {
-            string viewt = view.IsNotNullOrEmpty() ? view : ViewName;
-            if (!string.IsNullOrEmpty(where))
-                where = "AND " + where;
-            if (string.IsNullOrEmpty(SqlSelect))
-                return default(IEnumerable<T>);
+        //public IEnumerable<T> GetView(string view, string where, string orderBy = "CreationDate Desc")
+        //{
+        //    string viewt = view.IsNotNullOrEmpty() ? view : ViewName;
+        //    if (!string.IsNullOrEmpty(where))
+        //        where = "AND " + where;
+        //    return Query<T>("Select * From " + viewt + " WHERE IsDeleted=0 " + where + " order By " + orderBy);
+        //}
+        //public IEnumerable<T> GetView(int size, int page = 1, string where = "",
+        //    string orderBy = "CreationDate Desc", string view = "")
+        //{
+        //    string viewt = view.IsNotNullOrEmpty() ? view : ViewName;
+        //    if (!string.IsNullOrEmpty(where))
+        //        where = "AND " + where;
+        //    if (string.IsNullOrEmpty(SqlSelect))
+        //        return default(IEnumerable<T>);
 
-            return
-                Query<T>("Select * From " + viewt + " WHERE IsDeleted=0 " + where +
-                         string.Format(" ORDER BY {2} OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY", (page - 1) * size, size,
-                             orderBy));
-        }
+        //    return
+        //        Query<T>("Select * From " + viewt + " WHERE IsDeleted=0 " + where +
+        //                 string.Format(" ORDER BY {2} OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY", (page - 1) * size, size,
+        //                     orderBy));
+        //}
 
         public IEnumerable<T> GetAll(string query, int size, int page = 1, string orderBy = "CreationDate Desc", dynamic param = null)
         {
@@ -156,10 +156,10 @@ namespace Core.Repositories
                          string.Format(" ORDER BY {2} OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY", (page - 1) * size, size, orderBy), param);
         }
 
-        public IEnumerable<T> GetAllView(RequestData rd, out int total)
-        {
-            return GetAll(rd, out total, ViewName);
-        }
+        //public IEnumerable<T> GetAllView(RequestData rd, out int total)
+        //{
+        //    return GetAll(rd, out total, ViewName);
+        //}
         public IEnumerable<T> GetByIds(int[] ids, string idcolumn = "Id")
         {
             return
@@ -200,7 +200,7 @@ namespace Core.Repositories
             }
             return where;
         }
-            public IEnumerable<T> GetAll(RequestData rd, out int total, string view = "")
+        public IEnumerable<T> GetAll(RequestData rd, out int total, string view = "", bool query = false)
         {
 
             if (rd.Ids != null && rd.Ids.Any())
@@ -216,18 +216,25 @@ namespace Core.Repositories
             total = GetCount(where: where, view: view);
             return list;
         }
-        public IEnumerable<T> GetAll(int size, int page = 1, string where = "", string orderBy = "CreationDate Desc", string view = "")
+        public IEnumerable<T> GetAll(int size, int page = 1, string where = "", string orderBy = "CreationDate Desc", string view = "", bool query = false)
         {
             if (!string.IsNullOrEmpty(where))
                 where = "AND " + where;
             if (string.IsNullOrEmpty(SqlSelect))
                 return default(IEnumerable<T>);
 
+            string table = TableName;
+            if (string.IsNullOrEmpty(view))
+                table = view;
+
+            table = query ? $"({table})" : $"[{table}]";
 
             return
-                Query<T>($"Select * from [{(string.IsNullOrEmpty(view) ? TableName : view)}]  WHERE IsDeleted=0 " + where +
+                Query<T>($"Select * from {table}  WHERE IsDeleted=0 " + where +
                          string.Format(" ORDER BY {2} OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY", (page - 1) * size, size, orderBy));
         }
+
+
 
         public int Save(T model)
         {
@@ -331,7 +338,7 @@ namespace Core.Repositories
 
         public DateTime LastModified { get; set; }
         public bool IsDeleted { get; set; }
-      
+
 
     }
 

@@ -50,6 +50,8 @@ namespace API.Controllers
                 return NotFound("Username already exists");
             }
             P.Users.Save(value);
+            P.Users.CreateNewUserTables(value);
+            P.InitAnnotationRepositorys();
             return Ok(value);
         }
 

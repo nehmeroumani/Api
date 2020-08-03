@@ -11,7 +11,7 @@ namespace Core.Repositories.Annotations
             base.Init("AnnotationTask", "StartTweetId,EndTweetId,CreatedByUserId,UserId,Status,StartTime,FinishTime,TaskDuration");
         }
 
-        
+
     }
 
     public class AnnotationTask : BaseIntModel
@@ -61,13 +61,13 @@ namespace Core.Repositories.Annotations
             return GetWhere($"UserId={userId} and (Status={(int)AnnotationTaskUserStatusEnum.InProgress} OR Status={(int)AnnotationTaskUserStatusEnum.New}) ").FirstOrDefault();
         }
 
-      
+
         public List<AnnotationTaskUserTweet> GetStatisticsStatus(RequestData rd, out int total)
         {
             string Where = "WHERE atut.IsDeleted=0 ";
 
             var userFilter = rd.Filter.FirstOrDefault(x => x.Key.ToLower() == "userid");
-         
+
             if (userFilter != null)
             {
                 Where += $" AND UserId = '{userFilter.Value}' ";
@@ -76,17 +76,35 @@ namespace Core.Repositories.Annotations
             var data = Query<AnnotationTaskUserTweet>("SELECT Status,avg(l.Value) as AvgLevelOfConfidence,avg(TaskDuration) as AvgTaskDuration,count(*) as TotalTasks , " +
                                                       "count(*) * 100.0 / (select count(*) from [AnnotationTaskUserTweet] WHERE IsDeleted=0 ) as percentage" +
                 " ,sum(TaskDuration) as TotalTaskDuration   FROM [AnnotationTaskUserTweet] atut left join LevelOfConfidence l on l.Id = atut.LevelOfConfidenceId  " + Where + " GROUP BY Status ").ToList();
-            
+
 
             total = data.Count;
             return data;
         }
-    }   
+
+        public List<AnnotationTaskUserTweet>  GetAllView(RequestData rd, out int total)
+        {
+            var query =
+                @"SELECT        atu.Id, atu.CreationDate, atu.LastModified, atu.IsDeleted, atu.TweetId, atu.UserId, atu.AnnotationTaskId, atu.Status, dbo.[User].Name AS UserName, dbo.Tweet.Text AS TweetText, atu.StartTime, atu.FinishTime, 
+                         atu.LevelOfConfidenceId, atu.TaskDuration, atu.IsIrrelevant, dbo.LevelOfConfidence.Name AS ConfidenceName,
+                             (SELECT        COUNT(*) AS Expr1
+                               FROM            dbo.Annotation
+                               WHERE        (AnnotationTaskUserTweetId = atu.Id) AND (IsDeleted = 0)) AS TotalAnnotations
+                            FROM            dbo.AnnotationTaskUserTweet AS atu INNER JOIN
+                         dbo.[User] ON atu.UserId = dbo.[User].Id INNER JOIN
+                         dbo.Tweet ON atu.TweetId = dbo.Tweet.Id LEFT OUTER JOIN
+                         dbo.LevelOfConfidence ON atu.LevelOfConfidenceId = dbo.LevelOfConfidence.Id";
+
+            return GetAll(rd, out total, query, true).ToList();
+        }
+
+
+    }
     public class AnnotationTaskUserTweet : BaseIntModel
     {
         public bool? IsIrrelevant { get; set; }
         public int? LevelOfConfidenceId { get; set; }
-       
+
         public DateTime? StartTime { get; set; }
         public DateTime? FinishTime { get; set; }
         public int TaskDuration { get; set; }
@@ -96,7 +114,7 @@ namespace Core.Repositories.Annotations
         public int TweetId { get; set; }
         public int UserId { get; set; }
         public int AnnotationTaskId { get; set; }
-       
+
 
 
         public string ConfidenceName { get; set; }
@@ -108,12 +126,12 @@ namespace Core.Repositories.Annotations
         public double Percentage { get; set; }
         public int AvgTaskDuration { get; set; }
         public int AvgLevelOfConfidence { get; set; }
-        
+
         public List<AnnotationTaskUserTweet> StatusAgregates { get; set; }
 
         public List<Annotation> Annotations { get; set; }
         public int? NextAnnotationId { get; set; }
-        
+
         public int TotalAnnotations { get; set; }
 
     }

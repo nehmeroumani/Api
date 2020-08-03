@@ -14,29 +14,31 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class AnnotationReasonController : BaseController
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<AnnotationReason>> GetAll()
-        {
-            var rd = Rd();
+        //[HttpGet]
+        //public ActionResult<IEnumerable<AnnotationReason>> GetAll()
+        //{
+        //    var rd = Rd();
 
-            var l = P.AnnotationReasons.GetAll(rd, out var total).ToList();
-            T(total, rd);
-            return l;
-        }
+        //    var l = P.AnnotationReasons[UserId()].GetAll(rd, out var total).ToList();
+        //    T(total, rd);
+        //    return l;
+        //}
 
-        [HttpGet("{id}")]
-        public ActionResult<AnnotationReason> Get(int id)
-        {
-            var i = P.AnnotationReasons.Get(id);
-            if (i == null)
-                return NotFound();
-            return i;
-        }
+        //[HttpGet("{id}")]
+        //public ActionResult<AnnotationReason> Get(int id)
+        //{
+        //    var i = P.AnnotationReasons[UserId()].Get(id);
+        //    if (i == null)
+        //        return NotFound();
+        //    return i;
+        //}
 
         [HttpPost]
         public IActionResult Save([FromBody] AnnotationReason value)
         {
-            var annotation = P.Annotations.Get(value.AnnotationId);
+            var userid = value.UserId;
+
+            var annotation = P.Annotations[userid].Get(value.AnnotationId);
             var annotationTaskUserTweet = P.AnnotationTaskUserTweets.Get(annotation.AnnotationTaskUserTweetId);
 
             if (annotationTaskUserTweet.Status == (int)AnnotationTaskUserStatusEnum.Done)
@@ -47,16 +49,16 @@ namespace API.Controllers
 
             if (value.Id == 0)
             {
-                P.AnnotationReasons.Save(value);
+                P.AnnotationReasons[userid].Save(value);
 
                 int i = 0;
-                var oldWords = P.AnnotationReasonWords.GetWhere("AnnotationReasonId=" + value.Id);
+                var oldWords = P.AnnotationReasonWords[userid].GetWhere("AnnotationReasonId=" + value.Id);
                 if (value.AnnotationReasonWords != null)
                 {
                     foreach (var u in value.AnnotationReasonWords)
                     {
                         if (oldWords.All(x => x.TweetWordId != u.TweetWordId))
-                            P.AnnotationReasonWords.Save(new AnnotationReasonWord
+                            P.AnnotationReasonWords[userid].Save(new AnnotationReasonWord
                             {
                                 TweetWordId = u.TweetWordId,
                                 AnnotationReasonId = value.Id
@@ -79,11 +81,11 @@ namespace API.Controllers
                     foreach (var o in oldWords)
                     {
                         if (value.AnnotationReasonWords.All(x => x.TweetWordId != o.TweetWordId))
-                            P.AnnotationReasonWords.Delete(o.Id);
+                            P.AnnotationReasonWords[userid].Delete(o.Id);
                     }
                 }
 
-                P.AnnotationReasons.Save(value);
+                P.AnnotationReasons[userid].Save(value);
             }
             return Ok(value);
         }
@@ -101,13 +103,13 @@ namespace API.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(int id,int userid)
         {
-            var i = P.AnnotationReasons.Get(id);
+            var i = P.AnnotationReasons[userid].Get(id);
             if (i == null)
                 return NotFound();
 
-            var annotation = P.Annotations.Get(i.AnnotationId);
+            var annotation = P.Annotations[userid].Get(i.AnnotationId);
             var annotationTaskUserTweet = P.AnnotationTaskUserTweets.Get(annotation.AnnotationTaskUserTweetId);
 
             if (annotationTaskUserTweet.Status == (int)AnnotationTaskUserStatusEnum.Done)
@@ -116,7 +118,7 @@ namespace API.Controllers
             //if (annotationTaskUserTweet.UserId.ToString() != User.Identity.Name.ToString())
             //    return Error("Cannot Edit task only by its user");
 
-            P.AnnotationReasons.Delete(id);
+            P.AnnotationReasons[userid].Delete(id);
             return Ok(i);
         }
     }

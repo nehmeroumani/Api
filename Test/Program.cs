@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
 
 namespace Test
 {
@@ -9,6 +10,13 @@ namespace Test
         static void Main(string[] args)
         {
             //Console.WriteLine("Hello World!");
+            //TestAgreement();
+
+         
+        }
+
+        public static void TestAgreement()
+        {
 
             var categories = new[] { 1, 2, 3, 4, 5 };
             var tweet = 1;
@@ -32,7 +40,7 @@ namespace Test
             };
 
 
-                int positivePositive = 0, positiveNegative = 0, negativePositive = 0, negativeNegative = 0;
+            int positivePositive = 0, positiveNegative = 0, negativePositive = 0, negativeNegative = 0;
 
             //var tc = new TweetCategory();
             //tc.CategoryResults1 = new Dictionary<int, int>();

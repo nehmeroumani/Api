@@ -55,13 +55,15 @@ namespace API.Controllers
             if (i == null)
                 return NotFound();
 
-            i.UserName = P.Users.Get(i.UserId)?.Name;
-            i.Annotations = P.Annotations.GetWhere("AnnotationTaskUserTweetId=" + id);
+            var userid = i.UserId;
 
-          
-            var reasons = P.AnnotationReasons.GetByIds(i.Annotations.Select(x => x.Id).ToArray(), "AnnotationId").ToList();
+            i.UserName = P.Users.Get(userid)?.Name;
+            
+            i.Annotations = P.Annotations[userid].GetWhere("AnnotationTaskUserTweetId=" + id);
+            
+            var reasons = P.AnnotationReasons[userid].GetByIds(i.Annotations.Select(x => x.Id).ToArray(), "AnnotationId").ToList();
 
-            var words = P.AnnotationReasonWords.GetByIds(reasons.Select(x => x.Id).ToArray(), "AnnotationReasonId");
+            var words = P.AnnotationReasonWords[userid].GetByIds(reasons.Select(x => x.Id).ToArray(), "AnnotationReasonId");
 
             reasons.ForEach(x =>
             {
