@@ -70,9 +70,9 @@ namespace Import
             if (importedTweets.Count() > 0) {
 
                 var newTweets = new List<Tweet>();
-                //Console.Write("Selecting new tweets only...");
-                //newTweets = SelectNewTweetsFrom(importedTweets);
-                //Console.WriteLine($" {newTweets.Count()} new tweets");
+                Console.Write("Selecting new tweets only...");
+                newTweets = SelectNewTweetsFrom(importedTweets);
+                Console.WriteLine($" {newTweets.Count()} new tweets");
 
                 List<Tweet> tweets;
                 if (newTweets.Count() > 0)

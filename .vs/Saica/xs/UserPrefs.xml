@@ -1,19 +1,13 @@
 ﻿<Properties StartupConfiguration="{9FF83376-6877-4DAB-8619-308331A187D0}|API">
-  <MonoDevelop.Ide.Workbench ActiveDocument="API/Program.cs">
-    <Files>
-      <File FileName="Import/Program.cs" Line="60" Column="64" />
-      <File FileName="Core/Repositories/BaseIntRepository.cs" Line="306" Column="72" />
-      <File FileName="API/Controllers/UploadController.cs" Line="1" Column="1" />
-      <File FileName="API/Controllers/TweetController.cs" Line="50" Column="7" />
-      <File FileName="API/Program.cs" Line="1" Column="1" />
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Saica" expanded="True" selected="True">
+          <Node name="Saica" expanded="True">
             <Node name="API" expanded="True" />
             <Node name="Core" expanded="True" />
             <Node name="Import" expanded="True" />
+            <Node name="Test" selected="True" />
           </Node>
         </State>
       </Pad>
