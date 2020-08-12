@@ -1,13 +1,26 @@
 ﻿<Properties StartupConfiguration="{9FF83376-6877-4DAB-8619-308331A187D0}|API">
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Test PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Core/DB/CustomSqlConnection.cs">
+    <Files>
+      <File FileName="Core/Repositories/UserRepository.cs" Line="23" Column="40" />
+      <File FileName="API/Controllers/AgreementController.cs" Line="227" Column="22" />
+      <File FileName="API/Controllers/TweetController.cs" Line="8" Column="1" />
+      <File FileName="Core/DB/CustomSqlConnection.cs" Line="44" Column="1" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Saica" expanded="True">
-            <Node name="API" expanded="True" />
-            <Node name="Core" expanded="True" />
+            <Node name="API" expanded="True">
+              <Node name="Controllers" expanded="True" />
+            </Node>
+            <Node name="Core" expanded="True">
+              <Node name="DB" expanded="True">
+                <Node name="CustomSqlConnection.cs" selected="True" />
+              </Node>
+              <Node name="Repositories" expanded="True" />
+            </Node>
             <Node name="Import" expanded="True" />
-            <Node name="Test" selected="True" />
           </Node>
         </State>
       </Pad>

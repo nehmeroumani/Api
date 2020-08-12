@@ -6,6 +6,7 @@ using Core;
 using Core.Repositories;
 using Core.Repositories.Annotations;
 using Microsoft.AspNetCore.Mvc;
+using Core.Repositories.Twitter;
 
 namespace API.Controllers
 {
@@ -35,13 +36,16 @@ namespace API.Controllers
             var dimensions = P.Dimensions.GetAll().ToList();
             categories.ForEach(x => x.Dimensions = dimensions.Where(z => z.CategoryId == x.Id).OrderBy(z => z.DisplayOrder).ToList());
 
-            var intersectedTweets = new List<int>();
+            var intersectedTweets = new List<Tweet>();
 
             foreach (var a in annotationsTaskUser1)
             {
                 if (annotationsTaskUser2.Any(x => x.TweetId == a.TweetId))
                 {
-                    intersectedTweets.Add(a.TweetId);
+                    intersectedTweets.Add(new Tweet() {
+                        Id = a.TweetId,
+                        Text = a.TweetText,
+                    });
                 }
             }
 
@@ -50,18 +54,19 @@ namespace API.Controllers
             foreach (var t in intersectedTweets)
             {
 
-                var tweetAnnotation1 = annotationsUser1.Where(x => x.TweetId == t).ToList();
-                var tweetAnnotation2 = annotationsUser2.Where(x => x.TweetId == t).ToList();
+                var tweetAnnotation1 = annotationsUser1.Where(x => x.TweetId == t.Id).ToList();
+                var tweetAnnotation2 = annotationsUser2.Where(x => x.TweetId == t.Id).ToList();
 
-                var tweetAnnotationReason1 = annotationsUserReason1.Where(x => x.TweetId == t).ToList();
-                var tweetAnnotationReason2 = annotationsUserReason2.Where(x => x.TweetId == t).ToList();
+                var tweetAnnotationReason1 = annotationsUserReason1.Where(x => x.TweetId == t.Id).ToList();
+                var tweetAnnotationReason2 = annotationsUserReason2.Where(x => x.TweetId == t.Id).ToList();
 
-                var words = Pool.I.TweetWords.GetWhere("TweetId=" + t).ToList();
+                var words = Pool.I.TweetWords.GetWhere("TweetId=" + t.Id).ToList();
 
                 var ta = new TweetAgreement
                 {
-                    Id = t,
-                    TweetId = t
+                    Id = t.Id,
+                    TweetId = t.Id,
+                    TweetText = t.Text
                 };
 
                 AgreementCategory(ta, categories, words, tweetAnnotation1, tweetAnnotation2, tweetAnnotationReason1, tweetAnnotationReason2);
@@ -219,6 +224,7 @@ namespace API.Controllers
     {
         public int Id { get; set; }
         public int TweetId { get; set; }
+        public string TweetText { get; set; }
         public double CategoryAgreement { get; set; }//F1 measure
         public double DimensionAgreement { get; set; }
         public double ReasonAgreement { get; set; }
