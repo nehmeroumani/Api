@@ -42,18 +42,20 @@ namespace API.Controllers
             {
                 if (annotationsTaskUser2.Any(x => x.TweetId == a.TweetId))
                 {
-                    intersectedTweets.Add(new Tweet() {
-                        Id = a.TweetId,
-                        Text = a.TweetText,
-                    });
+                    if (!intersectedTweets.Any(t => t.Id == a.TweetId))
+                    {
+                        intersectedTweets.Add(new Tweet()
+                        {
+                            Id = a.TweetId,
+                            Text = a.TweetText,
+                        });
+                    }
                 }
             }
-
             var lst = new List<TweetAgreement>();
 
             foreach (var t in intersectedTweets)
             {
-
                 var tweetAnnotation1 = annotationsUser1.Where(x => x.TweetId == t.Id).ToList();
                 var tweetAnnotation2 = annotationsUser2.Where(x => x.TweetId == t.Id).ToList();
 
@@ -73,6 +75,27 @@ namespace API.Controllers
 
                 lst.Add(ta);
             }
+            //Order and sort agreements based on the "order" and "sort" query params
+            if ( !string.IsNullOrEmpty(rd.Order) && !string.IsNullOrEmpty(rd.Sort))
+            {
+                switch (rd.Order)
+                {
+                    case "category_agreement":
+                        lst = lst.OrderBy((a)=>a.CategoryAgreement).ToList();
+                        break;
+                    case "dimension_agreement":
+                        lst = lst.OrderBy((a) => a.DimensionAgreement).ToList();
+                        break;
+                    case "reason_agreement":
+                        lst = lst.OrderBy((a) => a.ReasonAgreement).ToList();
+                        break;
+                }
+                if (rd.Sort == "desc")
+                {
+                    lst.Reverse();
+                }
+            }
+
             T(lst.Count, rd);
             return lst;
         }
@@ -90,6 +113,7 @@ namespace API.Controllers
                 FillMatrix(matrix, tc1, tc2);
             }
             var calc = CalculateMetrics(matrix);
+
             ta.CategoryAgreement = calc.F1Measure;
 
 
