@@ -26,6 +26,17 @@ namespace API.Controllers
             }
 
             var l = P.Users.GetAll(rd, out var total).ToList();
+            foreach(var u in l)
+            {
+                if(u.RoleEnum != RoleEnum.Admin)
+                {
+                    u.AvgLevelOfConfidence = P.AnnotationTaskUserTweets.GetAvgLevelOfConfidence(u.Id);
+                }
+                else
+                {
+                    u.AvgLevelOfConfidence = -1;
+                }
+            }
             T(total, rd);
             return l;
         }

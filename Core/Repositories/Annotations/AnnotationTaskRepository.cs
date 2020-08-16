@@ -96,6 +96,20 @@ namespace Core.Repositories.Annotations
             return data;
         }
 
+        public int GetAvgLevelOfConfidence(int userId)
+        {
+            string Where = $"WHERE atut.IsDeleted=0 AND atut.Status=30 AND UserId = '{userId}' ";
+            
+            var data = Query<AnnotationTaskUserTweet>("SELECT avg(l.Value) as AvgLevelOfConfidence " +
+                "FROM [AnnotationTaskUserTweet] atut left join LevelOfConfidence l on l.Id = atut.LevelOfConfidenceId  " + Where + " GROUP BY Status ").ToList();
+
+            if (data.Count> 0)
+            {
+                return data[0].AvgLevelOfConfidence;
+            }
+            return -1;
+        }
+
 
         public string GetViewQuery()
         {

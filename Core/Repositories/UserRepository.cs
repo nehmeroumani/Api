@@ -95,6 +95,7 @@ public class User : BaseIntModel
     public bool IsActive { get; set; }
 
     public bool ChangePassword { get; set; }
+    public int AvgLevelOfConfidence { get; set; }
 
 
     public bool Equals(User other)
