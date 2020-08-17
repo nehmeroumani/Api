@@ -21,6 +21,17 @@ namespace Core.Repositories.Annotations
 
             return GetAll(size, page, "", "CreationDate Desc", query, true).ToList();
         }
+
+        public List<Annotation> GetAllTweetAnnotationsByUser(int tweeId, int userId)
+        {
+            string Where = $"WHERE a.IsDeleted=0 AND atut.Status=30 AND atut.UserId = '{userId}' AND atut.TweetId={tweeId}";
+            string query = $"SELECT a.Id, a.CreationDate, a.LastModified, a.IsDeleted, a.AnnotationTaskId, a.CategoryId," +
+                         $" a.DimensionId, a.AnnotationTaskUserTweetId FROM " +
+                         $"{TableName} AS a INNER JOIN AnnotationTaskUserTweet atut ON a.AnnotationTaskUserTweetId = atut.Id "+Where;
+
+            var data = Query<Annotation>(query).ToList();
+            return data;
+        }
     }
 
     public class Annotation : BaseIntModel
