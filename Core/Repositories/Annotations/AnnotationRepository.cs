@@ -32,6 +32,22 @@ namespace Core.Repositories.Annotations
             var data = Query<Annotation>(query).ToList();
             return data;
         }
+
+        public List<AnnotationStatistics> GetStatistics(int userId)
+        {
+            string Where = $"WHERE a.IsDeleted=0 AND atut.Status=30 AND atut.UserId ={userId}";
+            string query = $"SELECT COUNT(*) AS Total, a.CategoryId, a.DimensionId FROM " +
+                         $"{TableName} AS a INNER JOIN AnnotationTaskUserTweet atut ON a.AnnotationTaskUserTweetId = atut.Id " + Where +
+                         " GROUP BY a.CategoryId, a.DimensionId";
+            var data = Query<AnnotationStatistics>(query).ToList();
+            if (data.Count > 0)
+            {
+                data.ForEach((AnnotationStatistics stats)=>{
+                    stats.UserId = userId;
+                });
+            }
+            return data;
+        }
     }
 
     public class Annotation : BaseIntModel
@@ -50,5 +66,13 @@ namespace Core.Repositories.Annotations
         public int TweetId { get; set; }
         public int UserId { get; set; }
 
+    }
+
+    public class AnnotationStatistics
+    {
+        public int UserId { get; set; }
+        public int CategoryId { get; set; }
+        public int DimensionId { get; set; }
+        public int Total { get; set; }
     }
 }

@@ -124,5 +124,53 @@ namespace API.Controllers
             P.Annotations[userid].Delete(id);
             return Ok(annotation);
         }
+
+        [HttpGet("statistics")]
+        public ActionResult<AnnotationStatisticsData> GetStatistics()
+        {
+            var users = P.Users.GetAll();
+            var allCategories = P.Categorys.GetAll();
+            var allSubCategories = P.Dimensions.GetAll();
+            var annotationStatisticsData = new AnnotationStatisticsData();
+            foreach (var user in users)
+            {
+                if (user.RoleEnum != RoleEnum.Admin)
+                {
+                    var stats = P.Annotations[user.Id].GetStatistics(user.Id);
+                    if (stats.Count > 0)
+                    {
+                        foreach (AnnotationStatistics s in stats)
+                        {
+                            if (!annotationStatisticsData.Categories.ContainsKey(s.CategoryId.ToString()))
+                            {
+                                annotationStatisticsData.Categories[s.CategoryId.ToString()] = allCategories.FirstOrDefault((c) => c.Id == s.CategoryId);
+                            }
+                            if (!annotationStatisticsData.SubCategories.ContainsKey(s.DimensionId.ToString()))
+                            {
+                                annotationStatisticsData.SubCategories[s.DimensionId.ToString()] = allSubCategories.FirstOrDefault((sc) => sc.Id == s.DimensionId);
+                            }
+                        }
+                        annotationStatisticsData.annotationStatistics.AddRange(stats);
+                    }
+                }
+            }
+
+            return annotationStatisticsData;
+        }
+
+        public class AnnotationStatisticsData
+        {
+            public List<AnnotationStatistics> annotationStatistics { get; }
+            public Dictionary<string, Category> Categories { get; }
+            public Dictionary<string, Dimension> SubCategories { get; }
+
+            public AnnotationStatisticsData()
+            {
+                annotationStatistics = new List<AnnotationStatistics>();
+                Categories = new Dictionary<string, Category>();
+                SubCategories = new Dictionary<string, Dimension>();
+            }
+        }
+
     }
 }
