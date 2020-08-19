@@ -23,6 +23,11 @@ namespace Core.Repositories.Annotations
 
             return GetAll(size, page, "", "CreationDate Desc", query, true).ToList();
         }
+
+        public void DeleteAll()
+        {
+            Execute($"DELETE FROM {TableName};");
+        }
     }
 
     public class AnnotationReason : BaseIntModel
@@ -49,6 +54,11 @@ namespace Core.Repositories.Annotations
         public AnnotationReasonWordRepository(int userId)
         {
             base.Init("AnnotationReasonWord_" + userId, "AnnotationReasonId,TweetWordId");
+        }
+
+        public void DeleteAll()
+        {
+            Execute($"DELETE FROM {TableName};");
         }
     }
 

@@ -11,6 +11,10 @@ namespace Core.Repositories
             base.Init("Category", "NameEn,Name,Icon,Color,DisplayOrder,IsActive");
         }
 
+        public void DeleteAll()
+        {
+            Execute($"DELETE FROM {TableName};");
+        }
     }
 
     public class Category : BaseIntModel

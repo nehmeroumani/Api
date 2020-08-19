@@ -22,6 +22,11 @@ namespace Core.Repositories
         {
             base.Init("TweetWord", "TweetId,WordId,Position");
         }
+
+        public void DeleteAll()
+        {
+            Execute($"DELETE FROM {TableName};");
+        }
     }
 
     public class TweetWord : BaseIntModel

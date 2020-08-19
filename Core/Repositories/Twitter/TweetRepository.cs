@@ -102,6 +102,11 @@ namespace Core.Repositories.Twitter
 
             return GetAll(rd, out total, query, true).ToList();
         }
+
+        public void DeleteAll()
+        {
+            Execute($"DELETE FROM {TableName};");
+        }
     }
     public static class TweetParser
     {

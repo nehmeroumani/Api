@@ -11,6 +11,10 @@ namespace Core.Repositories
             base.Init("Dimension", "NameEn,Name,Icon,Color,DisplayOrder,CategoryId,IsActive");
         }
 
+        public void DeleteAll()
+        {
+            Execute($"DELETE FROM {TableName};");
+        }
     }
 
     public class Dimension : BaseIntModel

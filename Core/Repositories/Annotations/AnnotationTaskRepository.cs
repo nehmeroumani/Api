@@ -26,6 +26,11 @@ namespace Core.Repositories.Annotations
 
             return GetAll(rd, out total, query, true).ToList();
         }
+
+        public void DeleteAll()
+        {
+            Execute($"DELETE FROM {TableName};");
+        }
     }
 
     public class AnnotationTask : BaseIntModel
@@ -134,6 +139,10 @@ namespace Core.Repositories.Annotations
             return GetAll(size,page,where,"CreationDate Desc", GetViewQuery(),true).ToList();
         }
 
+        public void DeleteAll()
+        {
+            Execute($"DELETE FROM {TableName};");
+        }
     }
     public class AnnotationTaskUserTweet : BaseIntModel
     {

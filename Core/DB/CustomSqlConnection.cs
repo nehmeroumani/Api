@@ -67,6 +67,7 @@ namespace Core.DB
         {
             Debug.WriteLine(query);
 
+
             return _connection.ExecuteScalar<int>(query, param, transaction);
         }
         public int Execute(string query, object param = null, IDbTransaction transaction = null)

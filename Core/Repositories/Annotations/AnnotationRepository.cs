@@ -42,11 +42,18 @@ namespace Core.Repositories.Annotations
             var data = Query<AnnotationStatistics>(query).ToList();
             if (data.Count > 0)
             {
-                data.ForEach((AnnotationStatistics stats)=>{
+                data.ForEach((AnnotationStatistics stats) =>
+                {
                     stats.UserId = userId;
                 });
             }
             return data;
+
+        }
+
+        public void DeleteAll()
+        {
+            Execute($"DELETE FROM {TableName};");
         }
     }
 

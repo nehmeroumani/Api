@@ -1,28 +1,10 @@
 ﻿<Properties StartupConfiguration="{9FF83376-6877-4DAB-8619-308331A187D0}|API">
   <MonoDevelop.Ide.ItemProperties.Test PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench>
-    <Files>
-      <File FileName="API/Program.cs" Line="19" Column="1" />
-      <File FileName="API/Controllers/CategoryController.cs" Line="1" Column="1" />
-      <File FileName="Core/Repositories/Annotations/AnnotationRepository.cs" Line="46" Column="43" />
-      <File FileName="API/Controllers/AnnotationController.cs" Line="163" Column="37" />
-      <File FileName="API/Controllers/TweetController.cs" Line="156" Column="10" />
-      <File FileName="Core/DB/CustomSqlConnection.cs" Line="44" Column="1" />
-    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Saica" expanded="True">
-            <Node name="API" expanded="True" />
-            <Node name="Core" expanded="True">
-              <Node name="DB" expanded="True">
-                <Node name="CustomSqlConnection.cs" selected="True" />
-              </Node>
-              <Node name="Repositories" expanded="True">
-                <Node name="Annotations" expanded="True" />
-              </Node>
-            </Node>
-          </Node>
+          <Node name="Saica" expanded="True" />
         </State>
       </Pad>
     </Pads>
