@@ -1,10 +1,17 @@
 ﻿<Properties StartupConfiguration="{9FF83376-6877-4DAB-8619-308331A187D0}|API">
   <MonoDevelop.Ide.ItemProperties.Test PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench>
+    <Files>
+      <File FileName="Core/DB/CustomSqlConnection.cs" Line="71" Column="1" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Saica" expanded="True" />
+          <Node name="Saica" expanded="True">
+            <Node name="API" expanded="True">
+              <Node name="db" selected="True" />
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>
